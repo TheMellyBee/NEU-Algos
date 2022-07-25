@@ -66,7 +66,7 @@ def printNeatly(text: str, max: int) -> str:
         for j in range(NUM_WORDS-1, i, -1):
             if not cost_table[i][j-1]:
                 continue
-            if not totals[i] or totals[i] < totals[j] + cost_table[i][j-1]:
+            if not totals[i] or totals[i] > totals[j] + cost_table[i][j-1]:
                 totals[i] = totals[j] + cost_table[i][j - 1]
                 finished[i] = j
 
