@@ -35,6 +35,7 @@ def longestPalindromeSubsequence(str: str) -> str:
 
 # I played with a couple different wayof of doing the costs, and max together through forwards and backwards
 # I finally got it somewhat working, but it wants to put everthing on a seperate line. You can see the cost table and everything though
+# NEVERMIND! Finally got it. I was thinking about getting the min vs max of the percentage of the line left wrong
 def printNeatly(text: str, max: int) -> str:
     words = text.split(" ")
     NUM_WORDS = len(words)
@@ -77,11 +78,13 @@ def printNeatly(text: str, max: int) -> str:
     for index in finished:
         for i in range(result_index, index):
             curr_line.append(words[i])
-        lines.append(" ".join(curr_line))
-        curr_line = []
-        result_index = index
-
-    return "\n".join(lines)
+        if curr_line:
+            lines.append(" ".join(curr_line))
+            curr_line = []
+            result_index = index
+    finished = "\n".join(lines)
+    print('\n' + finished)
+    return finished
 
 
 # so this is using a greedy algo, but it isn't optimal. We need to do something iwth tables to do this correctly
