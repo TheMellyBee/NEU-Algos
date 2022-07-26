@@ -6,7 +6,7 @@
 from typing import Optional, Tuple, List
 
 import pytest
-
+from collections import deque
 
 class Graph:
     # i want to change this to take in the matrix and turn it into
@@ -23,7 +23,6 @@ class Graph:
                         self.graph[node_num] = [other_num]
                     else:
                         self.graph[node_num].append(other_num)
-        print(self.graph)
 
     def children(self, node) -> List[int]:
         if node not in self.graph:
@@ -33,7 +32,34 @@ class Graph:
 
 
 def designate(g: Graph) -> Optional[Tuple[List[int]]]:
-    return None
+    BABY_FACE = True
+    HEELS = False
+    baby_faces = set()
+    heels = set()
+    current_flag = BABY_FACE
+    current_rival = deque()
+    next_rival = deque()
+
+    current_rival.append(0)
+    while current_rival:
+        node = current_rival.popleft()
+        if current_flag == BABY_FACE:
+            baby_faces.add(node)
+        else:
+            heels.add(node)
+
+        for child in g.children(node):
+            next_rival.append(child)
+
+        if not current_rival:
+            current_flag = not current_flag
+            current_rival = next_rival
+            next_rival = deque()
+
+    if baby_faces.intersection(heels):
+        return None
+
+    return (list(baby_faces), list(heels))
 
 
 def countSimplePaths(g: Graph, s: int, t: int) -> int:
