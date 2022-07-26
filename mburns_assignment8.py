@@ -38,9 +38,21 @@ def designate(g: Graph) -> Optional[Tuple[List[int]]]:
 
 def countSimplePaths(g: Graph, s: int, t: int) -> int:
     count = 0
+    visited = set()
+    stack = g.children(s)
+
+    while stack:
+        node = stack.pop()
+        if node == t:
+            count += 1
+            continue
+
+        if node not in visited:
+            visited.add(node)
+            for child in g.children(node):
+                stack.append(child)
 
     return count
-
 
 @pytest.mark.parametrize("matrix,expected", [
     ([[0, 1], [1, 0]], ([0], [1])),
@@ -56,5 +68,5 @@ def test_designate(matrix, expected):
     ([[0, 1, 1], [1, 0, 1], [1, 1, 0]], 0, 2, 2)
 ])
 def test_countSimplePaths(matrix, s, t, expected):
-    rivals = Graph(matrix)
-    assert designate(g) == expected
+    graph = Graph(matrix)
+    assert countSimplePaths(graph, s, t) == expected
