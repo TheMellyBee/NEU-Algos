@@ -9,18 +9,28 @@ import pytest
 
 
 class Graph:
+    # i want to change this to take in the matrix and turn it into
+    # a dict of list of connections
     def __init__(self, matrix: [[int]]):
-        self.matrix = matrix
-        self.num_rows = len(matrix)
-        self.num_columns = len(matrix[0])
+        self.graph = {}
+        for node_num, row in enumerate(matrix):
+            for other_num, other_node in enumerate(row):
+                if node_num == other_num:
+                    continue
 
-    def _is_valid_cell(self, x: int, y: int) -> bool:
-        if  0 <= x < self.num_rows and 0 <= y < self.num_rows:
-            return True
-        return False
+                if other_node == 1:
+                    if node_num not in self.graph:
+                        self.graph[node_num] = [other_num]
+                    else:
+                        self.graph[node_num].append(other_num)
+        print(self.graph)
 
-    def children(self, x: int, y:int) -> List[Tuple[int]]:
-        pass
+    def children(self, node) -> List[int]:
+        if node not in self.graph:
+            raise ValueError
+
+        return self.graph[node]
+
 
 def designate(g: Graph) -> Optional[Tuple[List[int]]]:
     return None
@@ -38,7 +48,7 @@ def countSimplePaths(g: Graph, s: int, t: int) -> int:
 ])
 def test_designate(matrix, expected):
     rivals = Graph(matrix)
-    assert designate(g) == expected
+    assert designate(rivals) == expected
 
 
 @pytest.mark.parametrize("matrix,s,t,expected", [
